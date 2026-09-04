@@ -1,17 +1,29 @@
 <template>
   <div class="container min-vh-100 d-flex align-items-center justify-content-center">
-    <div class="card shadow-sm" style="max-width: 420px; width: 100%;">
+    <div
+        class="card shadow-sm"
+        style="max-width: 420px; width: 100%;"
+    >
       <div class="card-body p-4">
+
         <div class="text-center mb-4">
-          <h1 class="h3 fw-bold">Iniciar sesión</h1>
+          <h1 class="h3 fw-bold">
+            Iniciar sesión
+          </h1>
+
           <p class="text-muted mb-0">
             Prueba Técnica Full Stack
           </p>
         </div>
 
         <form @submit.prevent="handleLogin">
+
+          <!-- Correo -->
           <div class="mb-3">
-            <label for="email" class="form-label">
+            <label
+                for="email"
+                class="form-label"
+            >
               Correo electrónico
             </label>
 
@@ -25,8 +37,12 @@
             />
           </div>
 
+          <!-- Contraseña -->
           <div class="mb-3">
-            <label for="password" class="form-label">
+            <label
+                for="password"
+                class="form-label"
+            >
               Contraseña
             </label>
 
@@ -41,6 +57,7 @@
             />
           </div>
 
+          <!-- Error -->
           <div
               v-if="errorMessage"
               class="alert alert-danger"
@@ -49,6 +66,7 @@
             {{ errorMessage }}
           </div>
 
+          <!-- Éxito -->
           <div
               v-if="successMessage"
               class="alert alert-success"
@@ -57,6 +75,7 @@
             {{ successMessage }}
           </div>
 
+          <!-- Botón -->
           <button
               type="submit"
               class="btn btn-primary w-100"
@@ -64,6 +83,7 @@
           >
             {{ loading ? 'Iniciando sesión...' : 'Iniciar sesión' }}
           </button>
+
         </form>
       </div>
     </div>
@@ -94,6 +114,9 @@ const handleLogin = async () => {
     successMessage.value = 'Inicio de sesión exitoso.';
 
     console.log('JWT recibido:', auth.token);
+
+    // Redirigir al panel principal
+    await navigateTo('/');
   } catch (error) {
     console.error(error);
 

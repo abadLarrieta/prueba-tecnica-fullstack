@@ -16,10 +16,31 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         setToken(token: string) {
             this.token = token;
+
+            const authCookie = useCookie<string | null>('auth_token', {
+                maxAge: 60 * 60 * 8,
+                sameSite: 'lax',
+            });
+
+            authCookie.value = token;
+        },
+
+        restoreSession() {
+            const authCookie = useCookie<string | null>('auth_token', {
+                maxAge: 60 * 60 * 8,
+                sameSite: 'lax',
+            });
+
+            if (authCookie.value) {
+                this.token = authCookie.value;
+            }
         },
 
         clearToken() {
             this.token = null;
+
+            const authCookie = useCookie<string | null>('auth_token');
+            authCookie.value = null;
         },
 
         async login(email: string, password: string) {

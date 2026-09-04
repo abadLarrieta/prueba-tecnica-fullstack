@@ -7,6 +7,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
@@ -26,8 +27,14 @@ export class TasksController {
     }
 
     @Get()
-    async findAll(): Promise<Task[]> {
-        return this.tasksService.findAll();
+    async findAll(
+        @Query('page') page = '1',
+        @Query('limit') limit = '10',
+    ) {
+        const pageNumber = Number(page);
+        const limitNumber = Number(limit);
+
+        return this.tasksService.findAll(pageNumber, limitNumber);
     }
 
     @Get(':id')

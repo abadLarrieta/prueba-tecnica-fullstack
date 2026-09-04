@@ -21,6 +21,7 @@ describe('TasksService', () => {
             create: vi.fn(),
             save: vi.fn(),
             find: vi.fn(),
+            findAndCount: vi.fn(),
             findOne: vi.fn(),
             remove: vi.fn(),
           },
@@ -59,7 +60,7 @@ describe('TasksService', () => {
     expect(result).toEqual(task);
   });
 
-  it('should return all tasks', async () => {
+  it('should return paginated tasks', async () => {
     const tasks = [
       {
         id: 1,
@@ -77,17 +78,25 @@ describe('TasksService', () => {
       },
     ] as Task[];
 
-    repository.find.mockResolvedValue(tasks);
+    repository.findAndCount.mockResolvedValue([tasks, 2]);
 
-    const result = await service.findAll();
+    const result = await service.findAll(1, 10);
 
-    expect(repository.find).toHaveBeenCalledWith({
+    expect(repository.findAndCount).toHaveBeenCalledWith({
       order: {
         fechaCreacion: 'DESC',
       },
+      skip: 0,
+      take: 10,
     });
 
-    expect(result).toEqual(tasks);
+    expect(result).toEqual({
+      data: tasks,
+      page: 1,
+      limit: 10,
+      total: 2,
+      totalPages: 1,
+    });
   });
 
   it('should return a task by id', async () => {

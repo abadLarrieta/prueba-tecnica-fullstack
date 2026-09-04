@@ -18,12 +18,31 @@ export class TasksService {
         return this.tasksRepository.save(task);
     }
 
-    async findAll(): Promise<Task[]> {
-        return this.tasksRepository.find({
+    async findAll(
+        page = 1,
+        limit = 10,
+    ): Promise<{
+        data: Task[];
+        page: number;
+        limit: number;
+        total: number;
+        totalPages: number;
+    }> {
+        const [data, total] = await this.tasksRepository.findAndCount({
             order: {
                 fechaCreacion: 'DESC',
             },
+            skip: (page - 1) * limit,
+            take: limit,
         });
+
+        return {
+            data,
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+        };
     }
 
     async findOne(id: number): Promise<Task> {

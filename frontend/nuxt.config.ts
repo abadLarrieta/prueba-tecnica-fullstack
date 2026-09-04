@@ -1,3 +1,5 @@
+import { defineNuxtConfig } from 'nuxt/config';
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
 
@@ -11,4 +13,10 @@ export default defineNuxtConfig({
     'bootstrap/dist/css/bootstrap.min.css',
     'bootstrap-icons/font/bootstrap-icons.css',
   ],
+
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: 'http://localhost:3001',
+    },
+  },
 });
